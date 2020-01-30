@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <title>Currency</title>
+    </head>
+    <body>
+        <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+            <header class="masthead mb-auto">
+                <div class="inner">
+                    <h3 class="masthead-brand">Currency</h3>
+                </div>
+            </header>
+
+            <main role="main" class="inner cover">
+                <h1 class="cover-heading">Current currency: <span id="current_currency"></span></h1>
+            </main>
+            <footer class="mastfoot mt-auto">
+                <div class="inner">
+                    <p>Currency</p>
+                </div>
+            </footer>
+        </div>
+
+        <script src="{{ asset('js/axios.min.js') }}"></script>
+        <script src="{{ asset('js/app.js') }}"></script>
+    </body>
+</html>

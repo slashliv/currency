@@ -4,24 +4,35 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
+    ecb.url: 'http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml'
+    cbr.url: 'https://www.cbr-xml-daily.ru/daily_json.js'
+    currency_provider.ordering:
+        - 'ecb'
+        - 'cbr'
 
 services:
-    # default configuration for services in *this* file
-    _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    App\Controller\CurrencyController:
+        public: true
+        arguments:
+            - "@app.service.chain_currency_provider"
+        calls:
+            - ['setContainer', ['@service_container']]
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    App\:
-        resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+    app.service.chain_currency_provider:
+        class: App\Service\ChainCurrencyProvider
+        arguments:
+            - '%currency_provider.ordering%'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
-    App\Controller\:
-        resource: '../src/Controller'
-        tags: ['controller.service_arguments']
+    app.service.ecb_currency_provider:
+        class: App\Service\EcbCurrencyProvider
+        tags:
+            - { name: 'app.currency_provider', alias: 'ecb' }
+        arguments:
+            - '%ecb.url%'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    app.service.cbr_currency_provider:
+        class: App\Service\CbrCurrencyProvider
+        tags:
+            - { name: 'app.currency_provider', alias: 'cbr' }
+        arguments:
+            - '%cbr.url%'

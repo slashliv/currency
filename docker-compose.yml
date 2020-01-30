@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+    php:
+        build:
+            context: ./docker/php
+        volumes:
+            - .:/var/www/project
+        environment:
+            XDEBUG_CONFIG: remote_host=172.17.0.1
+            PHP_IDE_CONFIG: serverName=Docker
+    nginx:
+        build:
+            context: ./docker/nginx
+        volumes:
+            - ./var/log/:/var/log/nginx
+            - .:/var/www/project
+        depends_on:
+            - php
+        ports:
+            - "80:80"
